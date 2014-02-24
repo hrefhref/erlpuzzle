@@ -1,8 +1,5 @@
 #include "erl_nif.h"
 #include <puzzle.h>
-#include <stdio.h>
-
-//extern char cvec_from_file(int argc, const ERL_NIF_TERM argv);
 
 // from http://d.hatena.ne.jp/vostok92/20091201/1259680319
 static int my_enif_get_string(ErlNifEnv *env, ERL_NIF_TERM list, char* buf)
@@ -22,19 +19,6 @@ static int my_enif_get_string(ErlNifEnv *env, ERL_NIF_TERM list, char* buf)
   
   return 1;
 }
-
-static int fuck(signed char* pute, int length, char* buf)
-{
-  int i = 0;
-  while(i < length) {
-    i++;
-    *buf = (char)pute[i];
-    buf++;
-  }
-  *buf = '\0';
-  return 1;
-}
-
 
 static ERL_NIF_TERM nif_cvec_from_file(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {

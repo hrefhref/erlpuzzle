@@ -24,8 +24,8 @@ Distance < puzzle:threshold()
 %% if true, images are similar. :)
 ```
 
-It's a work in progress. The distance I get from erlang is different from the distance I get from PHP, but it's still
-working fine:
+It's a work in progress. <del>The distance I get from erlang is different from the distance I get from PHP, but it's still
+working fine</del> (it's probably just PHP who can't handle a large double number):
 
 ```
 (shell)> Cvec = puzzle:cvec_from_file("/Users/j/Desktop/test.jpg").

@@ -1,0 +1,5 @@
+{application, puzzle, [
+    {description, "libpuzzle NIF."},
+    {vsn, "0.0.1"},
+    {applications, [kernel, stdlib]}
+]}.

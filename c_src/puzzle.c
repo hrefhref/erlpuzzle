@@ -89,10 +89,87 @@ static ERL_NIF_TERM nif_compare_cvec(ErlNifEnv* env, int argc, const ERL_NIF_TER
   return enif_make_double(env, result);
 }
 
+static ERL_NIF_TERM nif_compress_cvec(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+  ErlNifBinary vec;
+
+  PuzzleContext context;
+  PuzzleCvec cvec;
+  PuzzleCompressedCvec ccvec;
+
+  if (!enif_inspect_binary(env, argv[0], &vec))
+  {
+	return enif_make_badarg(env);
+  }
+
+  puzzle_init_cvec(&context, &cvec);
+  cvec.vec = vec.data;
+  cvec.sizeof_vec = (size_t) vec.size;
+  puzzle_init_compressed_cvec(&context, &ccvec);
+
+  if (puzzle_compress_cvec(&context, &ccvec, &cvec) != 0) {
+    puzzle_free_compressed_cvec(&context, &ccvec);
+    puzzle_free_cvec(&context, &cvec);
+    puzzle_free_context(&context);
+    return enif_make_atom(env, "puzzle_error");
+  }
+
+  ERL_NIF_TERM damnerlangterm;
+
+  unsigned char * bin_buf;
+  bin_buf = enif_make_new_binary(env, ccvec.sizeof_compressed_vec, &damnerlangterm);
+  memcpy(bin_buf, ccvec.vec, ccvec.sizeof_compressed_vec);
+
+  //puzzle_free_cvec(&context, &cvec);
+  //puzzle_free_compressed_cvec(&context, &ccvec);
+  //puzzle_free_context(&context);
+  return damnerlangterm;
+}
+
+static ERL_NIF_TERM nif_uncompress_cvec(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+  ErlNifBinary vec;
+
+  PuzzleContext context;
+  PuzzleCvec cvec;
+  PuzzleCompressedCvec ccvec;
+
+  if (!enif_inspect_binary(env, argv[0], &vec))
+  {
+	return enif_make_badarg(env);
+  }
+
+  puzzle_init_compressed_cvec(&context, &ccvec);
+  ccvec.vec = vec.data;
+  ccvec.sizeof_compressed_vec = (size_t) vec.size;
+  puzzle_init_cvec(&context, &cvec);
+
+  if (puzzle_uncompress_cvec(&context, &ccvec, &cvec) != 0) {
+    puzzle_free_compressed_cvec(&context, &ccvec);
+    puzzle_free_cvec(&context, &cvec);
+    puzzle_free_context(&context);
+    return enif_make_atom(env, "puzzle_error");
+  }
+
+  ERL_NIF_TERM damnerlangterm;
+
+  unsigned char * bin_buf;
+  bin_buf = enif_make_new_binary(env, cvec.sizeof_vec, &damnerlangterm);
+  memcpy(bin_buf, cvec.vec, cvec.sizeof_vec);
+
+  //puzzle_free_cvec(&context, &cvec);
+  //puzzle_free_compressed_cvec(&context, &ccvec);
+  //puzzle_free_context(&context);
+  return damnerlangterm;
+}
+
+
 static ErlNifFunc nif_funcs[] = {
     {"cvec_from_file", 1, nif_cvec_from_file},
     {"compare_cvec", 2, nif_compare_cvec},
     {"compare_cvec", 3, nif_compare_cvec},
+    {"compress_cvec", 1, nif_compress_cvec},
+    {"uncompress_cvec", 1, nif_uncompress_cvec}
 };
 
 ERL_NIF_INIT(puzzle, nif_funcs, NULL, NULL, NULL, NULL)

@@ -19,9 +19,20 @@ Cvec2 = puzzle:cvec_from_file("/path/to/another/image").
 Distance = puzzle:compare_cvec(Cvec, Cvec2, fix_for_texts).
 %% fix_for_texts is either 0 (disabled) or 1 (enabled).
 
-
 Distance < puzzle:threshold()
 %% if true, images are similar. :)
+
+%% -- Compression
+Ccvec = puzzle:compress_cvec(Cvec).
+Ccvec2 = puzzle:compress_cvec(Cvec2).
+
+Ucvec = puzzle:uncompress_cvec(Ccvec).
+Ucvec == Cvec. %% true
+
+%% Compare compressed cvec
+DistanceC = puzzle:compare_compressed_cvec(Ccvec, Ccvec2).
+Distance == DistanceC. %% true
+
 ```
 
 It's a work in progress. <del>The distance I get from erlang is different from the distance I get from PHP, but it's still
@@ -53,7 +64,6 @@ echo($d < PUZZLE_CVEC_SIMILARITY_THRESHOLD);
 ```
 
 TODO:
-* Support Cvec compression/uncompression
 * Find how to compile it properly without setting paths in rebar.config ;)
 * Write tests
 * ...

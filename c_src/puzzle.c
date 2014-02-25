@@ -83,12 +83,16 @@ static ERL_NIF_TERM nif_compare_cvec(ErlNifEnv* env, int argc, const ERL_NIF_TER
 
   result = puzzle_vector_normalized_distance(&context, &cvec1, &cvec2, fix_for_texts);
 
+  //puzzle_free_cvec(&context, &cvec1);
+  //puzzle_free_cvec(&context, &cvec2);
+
   return enif_make_double(env, result);
 }
 
 static ErlNifFunc nif_funcs[] = {
     {"cvec_from_file", 1, nif_cvec_from_file},
-    {"compare_cvec", 3, nif_compare_cvec}
+    {"compare_cvec", 2, nif_compare_cvec},
+    {"compare_cvec", 3, nif_compare_cvec},
 };
 
 ERL_NIF_INIT(puzzle, nif_funcs, NULL, NULL, NULL, NULL)

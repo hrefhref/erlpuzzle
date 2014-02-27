@@ -1,7 +1,7 @@
 -module(puzzle).
 
 -export([cvec_from_file/1, compare_cvec/2, compare_cvec/3, compress_cvec/1, uncompress_cvec/1,
-         compare_compressed_cvec/2 threshold/0, threshold/1]).
+         compare_compressed_cvec/2, threshold/0, threshold/1]).
 
 -on_load(on_load/0).
 

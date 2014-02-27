@@ -10,6 +10,9 @@ You'll need:
 * libpuzzle
 * gd (+ jpg, + png).
 
+**Warning** the current implementation may fuck up the erlang scheduler because `cvec_from_file` is too slow. Compare
+and compress is fast enough. I'll try to use [erlexec](https://github.com/saleyn/erlexec) for the `cvec_from_file` part.
+
 ```erlang
 application:start(puzzle).
 
